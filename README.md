@@ -1,141 +1,297 @@
+<div align="center">
+
 # SimpleAuth
 
-A modern full-stack authentication system built with React, TypeScript, Express, and PostgreSQL. This project demonstrates secure authentication implementation using industry-standard practices and technologies.
+### Modern Full-Stack Authentication System
+
+A secure, production-ready authentication system demonstrating industry-standard practices with JWT, TypeScript, and modern web technologies.
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-simple--auth--wheat.vercel.app-0A66C2?style=for-the-badge&logo=vercel&logoColor=white)](https://simple-auth-wheat.vercel.app)
+
+**React** · **TypeScript** · **Express** · **PostgreSQL** · **TailwindCSS**
+
+</div>
+
+## The Problem
+
+Building authentication from scratch is complex and error-prone. Many developers struggle with:
+
+- Implementing secure password hashing and storage
+- Managing JWT tokens and session handling correctly
+- Setting up protected routes on both frontend and backend
+- Preventing common security vulnerabilities (XSS, CSRF, SQL injection)
+
+**SimpleAuth solves this** by providing a clean, well-documented reference implementation that demonstrates secure authentication patterns you can learn from or use as a starting point.
 
 ## Features
 
-- **Secure Authentication**: JWT-based authentication with httpOnly cookies
-- **Password Security**: Bcrypt hashing with salt rounds
-- **Input Validation**: Server-side validation using Zod schemas
-- **Protected Routes**: Middleware-based route protection
-- **Type Safety**: Full TypeScript implementation across frontend and backend
-- **Modern UI**: Clean, responsive design with VS Code-inspired theme
-- **Database**: PostgreSQL with Docker containerization
+| Feature | Description |
+|---------|-------------|
+| **JWT Authentication** | Secure token-based auth with httpOnly cookies (3-hour expiry) |
+| **Password Security** | Bcrypt hashing with 10 salt rounds for secure storage |
+| **Input Validation** | Server-side validation using Zod schemas on all requests |
+| **Protected Routes** | Middleware-based route protection on frontend and backend |
+| **Type Safety** | Full TypeScript implementation across the entire stack |
+| **Modern UI** | Clean, responsive design with VS Code-inspired dark theme |
+
+### How It Works
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  React Frontend │────▶│  Express API    │────▶│   PostgreSQL    │
+│  (Vercel)       │◀────│  (Render)       │◀────│   Database      │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+        │                       │
+        └── JWT in httpOnly ────┘
+            Cookie
+```
 
 ## Tech Stack
 
+<table>
+<tr>
+<td align="center" width="50%">
+
 ### Frontend
-- **React 18** - Modern UI library with hooks
-- **TypeScript** - Type-safe JavaScript
-- **React Router** - Client-side routing with protected routes
-- **TanStack Query** - Powerful data fetching and state management
-- **Tailwind CSS** - Utility-first CSS framework
-- **Vite** - Fast build tool with HMR
+
+![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+
+- **React 19** with hooks and modern patterns
+- **TanStack Query** for data fetching
+- **React Router 7** for client-side routing
+- **Axios** for HTTP requests
+
+</td>
+<td align="center" width="50%">
 
 ### Backend
-- **Node.js & Express** - Web framework for REST API
-- **TypeScript** - End-to-end type safety
-- **PostgreSQL** - Relational database
-- **JWT** - Token-based authentication
-- **Bcrypt** - Password hashing
-- **Zod** - Schema validation
 
-### DevOps
-- **Docker** - Container orchestration
-- **PostgreSQL 16** - Dockerized database
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express_5-000000?style=flat-square&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-## Project Structure
+- **Express 5** REST API framework
+- **JWT** for token-based authentication
+- **Bcrypt** for password hashing
+- **Zod** for schema validation
+
+</td>
+</tr>
+</table>
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Docker and Docker Compose
+- Git
+
+### Installation
+
+**1. Clone the repository**
+
+```bash
+git clone https://github.com/amren008/SimpleAuth.git
+cd SimpleAuth
+```
+
+**2. Start PostgreSQL database**
+
+```bash
+docker-compose up -d
+```
+
+**3. Set up the backend**
+
+```bash
+cd api
+npm install
+```
+
+Create a `.env` file in the `api` directory:
+
+```env
+PORT=3000
+DATABASE_URL=postgresql://postgres:password@localhost:5432/authdb
+JWT_SECRET=your-secret-key-here
+NODE_ENV=development
+```
+
+Start the backend server:
+
+```bash
+npm run dev
+```
+
+**4. Set up the frontend**
+
+```bash
+cd ../web
+npm install
+npm run dev
+```
+
+**5. Access the application**
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3000
+
+## Architecture
+
+### System Overview
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                         Frontend (React)                          │
+├──────────────────────────────────────────────────────────────────┤
+│  Components    │    Pages      │    Hooks     │    API Layer     │
+│  - Navbar      │  - Home       │  - useAuth   │  - auth.ts       │
+│  - Footer      │  - Login      │              │  - axios.ts      │
+│  - Protected   │  - Signup     │              │                  │
+│    Route       │  - Dashboard  │              │                  │
+└───────────────────────────┬──────────────────────────────────────┘
+                            │ HTTP (JWT Cookie)
+┌───────────────────────────▼──────────────────────────────────────┐
+│                         Backend (Express)                         │
+├──────────────────────────────────────────────────────────────────┤
+│  Routes        │  Controllers  │  Middleware  │    Utils         │
+│  - authRoutes  │  - authCtrl   │  - auth      │  - jwt.ts        │
+│                │               │  - validation│  - password.ts   │
+└───────────────────────────┬──────────────────────────────────────┘
+                            │ SQL
+┌───────────────────────────▼──────────────────────────────────────┐
+│                      PostgreSQL Database                          │
+│                         (Docker)                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### Project Structure
 
 ```
 SimpleAuth/
 ├── api/                      # Backend application
 │   ├── src/
 │   │   ├── controllers/      # Request handlers
-│   │   ├── db/              # Database connection
-│   │   ├── middleware/      # Auth & validation middleware
-│   │   ├── routes/          # API routes
-│   │   ├── types/           # TypeScript types
-│   │   └── utils/           # Helper functions (JWT, bcrypt)
+│   │   ├── db/               # Database connection
+│   │   ├── middleware/       # Auth & validation middleware
+│   │   ├── routes/           # API routes
+│   │   ├── types/            # TypeScript types
+│   │   └── utils/            # Helper functions (JWT, bcrypt)
 │   └── package.json
 ├── web/                      # Frontend application
-│   ├── components/          # Reusable components
-│   ├── pages/               # Page components
+│   ├── components/           # Reusable components
+│   ├── pages/                # Page components
 │   ├── src/
-│   │   ├── api/            # API client functions
-│   │   ├── hooks/          # Custom React hooks
-│   │   └── types/          # TypeScript types
-│   ├── styles/             # Style configurations
+│   │   ├── api/              # API client functions
+│   │   ├── hooks/            # Custom React hooks
+│   │   └── types/            # TypeScript types
+│   ├── styles/               # Style configurations
 │   └── package.json
-└── docker-compose.yml       # Docker configuration
+└── docker-compose.yml        # Docker configuration
 ```
 
-## Getting Started
+## API Reference
 
-### Prerequisites
+### Register User
 
-- Node.js (v18 or higher)
-- Docker and Docker Compose
-- Git
+```http
+POST /api/auth/signup
+```
 
-### Installation
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | string | Yes | User's full name |
+| `username` | string | Yes | Unique username |
+| `email` | string | Yes | Unique email address |
+| `password` | string | Yes | User password |
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/amren008/SimpleAuth.git
-   cd SimpleAuth
-   ```
+**Response**
 
-2. **Start PostgreSQL database**
-   ```bash
-   docker-compose up -d
-   ```
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "username": "johndoe",
+    "email": "john@example.com"
+  }
+}
+```
 
-3. **Set up the backend**
-   ```bash
-   cd api
-   npm install
-   ```
+### Login
 
-   Create a `.env` file in the `api` directory:
-   ```env
-   PORT=3000
-   DATABASE_URL=postgresql://postgres:password@localhost:5432/authdb
-   JWT_SECRET=your-secret-key-here
-   NODE_ENV=development
-   ```
+```http
+POST /api/auth/login
+```
 
-   Start the backend server:
-   ```bash
-   npm run dev
-   ```
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `email` | string | Yes | User email |
+| `password` | string | Yes | User password |
 
-4. **Set up the frontend**
-   ```bash
-   cd ../web
-   npm install
-   npm run dev
-   ```
+### Logout
 
-5. **Access the application**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:3000
+```http
+POST /api/auth/logout
+```
 
-## API Endpoints
+Clears the authentication cookie.
 
-### Authentication
+### Get Current User
 
-- `POST /api/auth/signup` - Register a new user
-  - Body: `{ name, username, email, password }`
-  - Returns: User object and JWT token
+```http
+GET /api/auth/me
+```
 
-- `POST /api/auth/login` - Authenticate user
-  - Body: `{ email, password }`
-  - Returns: User object and JWT token
+Requires authentication. Returns the currently logged-in user's details.
 
-- `POST /api/auth/logout` - Clear authentication cookie
-  - Returns: Success message
+## Database Schema
 
-- `GET /api/auth/me` - Get current user (Protected)
-  - Headers: `Authorization: Bearer <token>`
-  - Returns: Current user details
+### users
 
-## Pages
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | SERIAL | Primary key |
+| `name` | VARCHAR(255) | User's full name |
+| `username` | VARCHAR(255) | Unique username |
+| `email` | VARCHAR(255) | Unique email address |
+| `password` | VARCHAR(255) | Bcrypt hashed password |
+| `created_at` | TIMESTAMP | Account creation time |
 
-- **Overview** (`/home`) - Project introduction and features
-- **Tech Stack** (`/about`) - Detailed technology breakdown with side navigation
-- **Dashboard** (`/dashboard`) - User profile and session information (Protected)
-- **Login** (`/login`) - User authentication
-- **Signup** (`/signup`) - User registration
+## Deployment
+
+### Vercel (Frontend)
+
+The frontend is configured for Vercel deployment with `vercel.json`:
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
+```
+
+### Render (Backend)
+
+The backend includes a `render-build.sh` script for Render deployment:
+
+```bash
+npm install && npm run build
+```
+
+Set these environment variables on Render:
+
+```
+PORT=3000
+NODE_ENV=production
+DATABASE_URL=<your-render-postgresql-url>
+JWT_SECRET=<generated-secret>
+FRONTEND_URL=<your-vercel-url>
+```
 
 ## Security Features
 
@@ -146,118 +302,33 @@ SimpleAuth/
 - CORS configuration for cross-origin requests
 - SQL injection prevention through parameterized queries
 
-## Database Schema
+## Roadmap
 
-### Users Table
-```sql
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  username VARCHAR(255) UNIQUE NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-## Development
-
-### Backend Development
-```bash
-cd api
-npm run dev
-```
-
-### Frontend Development
-```bash
-cd web
-npm run dev
-```
-
-### Database Management
-
-View PostgreSQL logs:
-```bash
-docker-compose logs postgres
-```
-
-Access PostgreSQL CLI:
-```bash
-docker exec -it simpleauth-postgres-1 psql -U postgres -d authdb
-```
-
-Stop database:
-```bash
-docker-compose down
-```
-
-## Environment Variables
-
-### Backend (`api/.env`)
-```env
-PORT=3000
-DATABASE_URL=postgresql://postgres:password@localhost:5432/authdb
-JWT_SECRET=your-secret-key-here
-NODE_ENV=development
-```
-
-### Frontend
-The frontend uses the API URL configured in `web/src/api/auth.ts`:
-```typescript
-const API_URL = "http://localhost:3000";
-```
-
-## Building for Production
-
-### Backend
-```bash
-cd api
-npm run build
-npm start
-```
-
-### Frontend
-```bash
-cd web
-npm run build
-```
-
-The build output will be in the `web/dist` directory.
-
-## Architecture
-
-### Frontend Architecture
-- Component-based structure
-- Custom hooks for authentication logic
-- Protected route wrapper component
-- API layer abstraction
-- Centralized state management with TanStack Query
-
-### Backend Architecture
-- MVC pattern
-- Middleware-based validation
-- Centralized error handling
-- Database connection pooling
-- Environment-based configuration
+- [ ] **Email Verification** - Verify user email addresses
+- [ ] **Password Reset** - Forgot password functionality
+- [ ] **OAuth Integration** - Google/GitHub login
+- [ ] **Rate Limiting** - Prevent brute force attacks
+- [ ] **Refresh Tokens** - Implement token refresh mechanism
+- [ ] **Two-Factor Auth** - Add 2FA support
 
 ## Contributing
 
-This is a portfolio project, but suggestions and feedback are welcome. Feel free to open an issue or submit a pull request.
+Contributions are welcome! Here's how you can help:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is licensed under the MIT License.
 
-## Author
+---
 
-**Amarendra**
-- GitHub: [@amren008](https://github.com/amren008)
+<div align="center">
 
-## Acknowledgments
+**Built by [@amren008](https://github.com/amren008)**
 
-Built as a portfolio project to demonstrate:
-- Full-stack development capabilities
-- Secure authentication practices
-- Modern web technologies
-- Clean code architecture
-- TypeScript proficiency
+</div>
