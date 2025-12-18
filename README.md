@@ -6,7 +6,7 @@
 
 A secure, production-ready authentication system demonstrating industry-standard practices with JWT, TypeScript, and modern web technologies.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-simple--auth--wheat.vercel.app-0A66C2?style=for-the-badge&logo=vercel&logoColor=white)](https://simple-auth-wheat.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-auth67.vercel.app-0A66C2?style=for-the-badge&logo=vercel&logoColor=white)](https://auth67.vercel.app)
 
 **React** · **TypeScript** · **Express** · **PostgreSQL** · **TailwindCSS**
 
@@ -96,7 +96,7 @@ Building authentication from scratch is complex and error-prone. Many developers
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/amren008/SimpleAuth.git
+git clone https://github.com/amarendra-008/SimpleAuth.git
 cd SimpleAuth
 ```
 
@@ -329,6 +329,6 @@ This project is licensed under the MIT License.
 
 <div align="center">
 
-**Built by [@amren008](https://github.com/amren008)**
+**Built by [@amarendra-008](https://github.com/amarendra-008)**
 
 </div>
